@@ -6,7 +6,7 @@ Backend Spring Boot para monitoreo y evacuacion sismica.
 
 - Java 25.0.1
 - Maven 3.9.16 o compatible
-- MySQL ejecutandose en `localhost:3306`
+- MySQL compatible con conexiones SSL (por ejemplo, Aiven for MySQL).
 
 El proyecto usa Java 25 y Spring Boot 3.5.6.
 
@@ -22,6 +22,25 @@ mvn -version
 Maven debe mostrar Java 25.0.1.
 
 ## Ejecutar la aplicacion
+
+### Variables de entorno
+
+En Render configura estas variables:
+
+```text
+SPRING_PROFILES_ACTIVE=prod
+DB_URL=jdbc:mysql://HOST:PUERTO/defaultdb?sslMode=REQUIRED
+DB_USER=avnadmin
+DB_PASSWORD=tu-password-de-aiven
+JWT_SECRET=secreto-base64-largo-y-aleatorio
+ADMIN_EMAIL=admin@tu-dominio.com
+ADMIN_PASSWORD=tu-password-del-administrador
+ADMIN_FULL_NAME=QuakExit Administrator
+CORS_ALLOWED_ORIGINS=https://tu-frontend.netlify.app
+FLYWAY_ENABLED=true
+```
+
+`DB_URL` debe usar el host, puerto y base de datos que entrega Aiven. No uses `localhost` en Render. `JWT_SECRET` debe ser una cadena Base64 válida porque la aplicación la decodifica al iniciar.
 
 Desde la carpeta raiz del proyecto:
 
@@ -52,6 +71,8 @@ http://localhost:8080/v3/api-docs
 ```
 
 La especificacion OpenAPI debe responder con HTTP 200 cuando la aplicacion este activa.
+
+El endpoint publico de salud es `GET /health` y responde `{"status":"UP"}`. Swagger UI (`/swagger-ui/index.html`) y OpenAPI (`/v3/api-docs`) son accesibles sin token.
 
 ## Ejecutar como JAR
 
