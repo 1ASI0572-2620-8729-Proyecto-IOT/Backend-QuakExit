@@ -41,6 +41,8 @@ app:
     scan-interval-ms: ${MAINTENANCE_SCAN_INTERVAL_MS:300000}
   notifications:
     provider: ${NOTIFICATION_PROVIDER:none}
+  payments:
+    simulation-enabled: ${PAYMENT_SIMULATION_ENABLED:true}
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

@@ -2,6 +2,8 @@ package com.terraguard.quakexit.audit.controller;
 
 import com.terraguard.quakexit.audit.dto.AuditDtos.AuditResponse;
 import com.terraguard.quakexit.audit.service.AuditService;
+import com.terraguard.quakexit.subscription.model.SubscriptionEnums.FeatureCode;
+import com.terraguard.quakexit.subscription.service.SubscriptionService;
 import com.terraguard.quakexit.iam.entity.User;
 import com.terraguard.quakexit.iam.repository.UserRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuditController {
     private final AuditService service;
     private final UserRepository users;
+    private final SubscriptionService subscriptions;
 
     @GetMapping
     public Page<AuditResponse> search(@RequestParam(required = false) Long userId,
@@ -30,6 +33,7 @@ public class AuditController {
                                       @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
                                       Authentication authentication) {
         User user = users.findByEmailIgnoreCase(authentication.getName()).orElseThrow();
+        subscriptions.requireFeature(user, FeatureCode.AUDIT);
         if (user.getRole().name().equals("HOMEOWNER")) throw new AccessDeniedException("Sin permisos para consultar auditoria");
         return service.search(userId, action, from, to, propertyId, buildingId, entityType, pageable);
     }

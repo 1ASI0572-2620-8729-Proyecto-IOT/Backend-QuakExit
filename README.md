@@ -74,6 +74,32 @@ La especificacion OpenAPI debe responder con HTTP 200 cuando la aplicacion este 
 
 El endpoint publico de salud es `GET /health` y responde `{"status":"UP"}`. Swagger UI (`/swagger-ui/index.html`) y OpenAPI (`/v3/api-docs`) son accesibles sin token.
 
+## Suscripciones y pagos
+
+Endpoints protegidos con JWT:
+
+```text
+GET  /api/v1/subscriptions/plans
+GET  /api/v1/subscriptions/current
+GET  /api/v1/subscriptions/features
+POST /api/v1/subscriptions/checkout
+POST /api/v1/subscriptions/simulate-payment
+POST /api/v1/subscriptions/cancel
+POST /api/v1/subscriptions/renew
+POST /api/v1/subscriptions/webhook
+```
+
+`POST /api/v1/subscriptions/checkout` crea una orden `PENDING_PAYMENT`. No recibe ni almacena datos de tarjetas. Para desarrollo, habilita `PAYMENT_SIMULATION_ENABLED=true` y confirma la orden con:
+
+```json
+{
+	"orderId": "order-123",
+	"result": "APPROVED"
+}
+```
+
+En produccion `PAYMENT_SIMULATION_ENABLED` debe permanecer en `false`. Las tablas de suscripciones se crean con la migracion `V2__add_subscriptions_and_orders.sql`; el despliegue debe ejecutar Flyway (`FLYWAY_ENABLED=true`) despues de reparar cualquier migracion fallida existente.
+
 ## Ejecutar como JAR
 
 Compila el proyecto:
