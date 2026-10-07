@@ -98,7 +98,7 @@ POST /api/v1/subscriptions/webhook
 }
 ```
 
-En produccion `PAYMENT_SIMULATION_ENABLED` debe permanecer en `false`. Las tablas de suscripciones se crean con la migracion `V2__add_subscriptions_and_orders.sql`; el despliegue debe ejecutar Flyway (`FLYWAY_ENABLED=true`) despues de reparar cualquier migracion fallida existente.
+En produccion `PAYMENT_SIMULATION_ENABLED` debe permanecer en `false`. El esquema completo se crea con las migraciones Flyway `V1__create_core_schema.sql`, `V2__add_observability_notifications_maintenance.sql` y `V3__add_subscriptions_and_orders.sql`; el despliegue debe ejecutar Flyway (`FLYWAY_ENABLED=true`).
 
 ## Ejecutar como JAR
 
@@ -125,5 +125,4 @@ Para verificar tambien el empaquetado:
 ```powershell
 mvn clean verify -Djacoco.skip=false
 ```
-
 
