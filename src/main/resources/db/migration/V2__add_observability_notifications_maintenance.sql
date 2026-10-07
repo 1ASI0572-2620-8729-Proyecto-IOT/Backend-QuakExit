@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS audit_records (
     entity_id BIGINT NULL,
     property_id BIGINT NULL,
     building_id BIGINT NULL,
-    detail_json LONGTEXT NULL,
+    detail_json TINYTEXT NULL,
     ip_address VARCHAR(64) NULL,
     PRIMARY KEY (id),
     INDEX idx_audit_created_at (created_at),
