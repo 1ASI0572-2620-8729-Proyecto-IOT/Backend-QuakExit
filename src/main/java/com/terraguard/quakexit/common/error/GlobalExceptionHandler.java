@@ -10,8 +10,10 @@ import org.springframework.http.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.AccessDeniedException;
+import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     ResponseEntity<ApiError> notFound(ResourceNotFoundException ex, HttpServletRequest req) { return build(HttpStatus.NOT_FOUND, ex.getMessage(), req, List.of()); }
@@ -29,7 +31,10 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.BAD_REQUEST, "La solicitud contiene errores", req, fields);
     }
     @ExceptionHandler(Exception.class)
-    ResponseEntity<ApiError> generic(Exception ex, HttpServletRequest req) { return build(HttpStatus.INTERNAL_SERVER_ERROR, "Error interno del servidor", req, List.of()); }
+    ResponseEntity<ApiError> generic(Exception ex, HttpServletRequest req) {
+        log.error("Unhandled API error for {} {}", req.getMethod(), req.getRequestURI(), ex);
+        return build(HttpStatus.INTERNAL_SERVER_ERROR, "Error interno del servidor", req, List.of());
+    }
     private ResponseEntity<ApiError> build(HttpStatus status, String message, HttpServletRequest req, List<ApiError.FieldError> fields) {
         return ResponseEntity.status(status).body(new ApiError(Instant.now(), status.value(), status.getReasonPhrase(), message, req.getRequestURI(), fields));
     }
