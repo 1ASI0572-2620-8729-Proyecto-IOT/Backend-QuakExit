@@ -11,6 +11,7 @@ public interface DeviceRepository extends JpaRepository<Device, Long>, org.sprin
     Optional<Device> findByMacAddress(String macAddress);
     boolean existsByDeviceCode(String deviceCode);
     java.util.List<Device> findByOwnerId(Long ownerId);
+    java.util.List<Device> findByUnitId(Long unitId);
     java.util.List<Device> findByBuildingId(Long buildingId);
     @Query("select d from Device d where d.building.owner.id = :ownerId")
     java.util.List<Device> findByBuildingOwnerId(@Param("ownerId") Long ownerId);

@@ -1,6 +1,7 @@
 package com.terraguard.quakexit.device.entity;
 
 import com.terraguard.quakexit.b2b.entity.Building;
+import com.terraguard.quakexit.b2b.entity.BuildingUnit;
 import com.terraguard.quakexit.common.entity.BaseEntity;
 import com.terraguard.quakexit.common.enums.DomainEnums.*;
 import com.terraguard.quakexit.iam.entity.User;
@@ -20,6 +21,7 @@ public class Device extends BaseEntity {
     @Column(length = 120) private String alias;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "owner_id") private User owner;
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "building_id") private Building building;
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "unit_id") private BuildingUnit unit;
     @Column(name = "firmware_version", length = 40) private String firmwareVersion;
     @Enumerated(EnumType.STRING) @Column(nullable = false, length = 20) @Builder.Default private DeviceStatus status = DeviceStatus.OFFLINE;
     @Column(name = "last_seen_at") private Instant lastSeenAt;
