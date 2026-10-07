@@ -4,6 +4,7 @@ import com.terraguard.quakexit.audit.service.AuditService;
 import com.terraguard.quakexit.b2b.entity.Building;
 import com.terraguard.quakexit.b2b.repository.BuildingRepository;
 import com.terraguard.quakexit.common.exception.ApiExceptions.*;
+import com.terraguard.quakexit.common.enums.DomainEnums.Role;
 import com.terraguard.quakexit.iam.entity.User;
 import com.terraguard.quakexit.property.entity.PropertyLayout;
 import com.terraguard.quakexit.property.repository.PropertyLayoutRepository;
@@ -86,6 +87,9 @@ public class SubscriptionService {
 
     @Transactional(readOnly = true)
     public void requireFeature(User user, FeatureCode feature) {
+        if (user.getRole() == Role.SYSTEM_ADMIN) {
+            return;
+        }
         Subscription subscription = findUsable(user);
         if (subscription == null || !features(subscription).contains(feature.name())) {
             throw new FeatureAccessException("FEATURE_NOT_INCLUDED", "Esta funcion requiere una suscripcion que incluya " + feature.name() + ".");
