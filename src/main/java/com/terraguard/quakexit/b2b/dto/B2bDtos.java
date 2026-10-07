@@ -10,4 +10,7 @@ public final class B2bDtos {
     public record DeviceRegistration(@NotBlank String deviceCode, @NotBlank @Pattern(regexp="^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$") String macAddress, @NotBlank String alias) {}
     public record BulkRegisterResponse(int registered, int skipped) {}
     public record AlarmResponse(boolean activated, int devicesAffected, String scope) {}
+    public record CreateUnitRequest(@NotNull Long buildingId, @NotBlank @Size(max = 30) String unit,
+                                    @NotNull Long residentId, List<@Positive Long> deviceIds) {}
+    public record UnitResponse(String id, String unit, String resident, String status, int devices) {}
 }
